@@ -1,0 +1,38 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- Service Bean -->
+    <bean class="sp.com.AopUsingXSD.services.BankTransaction" id="objServices"/>
+
+	<bean class="sp.com.AopUsingXSD.services.AccountCreation" id="AccServices"/>
+    
+    <!-- Aspect Bean -->
+    <bean class="sp.com.AopUsingXSD.aspects.Aspect" id="objaspect"/>
+    
+    <!-- Aspect Bean -->
+    <bean class="sp.com.AopUsingXSD.aspects.SecurityService" id="securityaspect"/>
+    
+    <!-- AOP Configuration -->
+    <aop:config>
+        <aop:aspect ref="objaspect" id="LoggingAspectIp">
+            <aop:pointcut expression="execution(* sp.com.AopUsingXSD.services.BankTransaction.Upipayment())" id="btpointcut" />
+            <aop:before method="MyLogginBefore" pointcut-ref="btpointcut" />
+          <aop:after method="MyLoggin" pointcut-ref="btpointcut"/>
+        </aop:aspect>
+        <aop:aspect ref="securityaspect" id="seurityaspect">
+            <aop:pointcut expression="execution(* sp.com.AopUsingXSD.services.BankTransaction.WalletPayment())" id="btpointcut1" />
+            <aop:before method="mySecurity" pointcut-ref="btpointcut1" />
+          <aop:after method="mySecurity" pointcut-ref="btpointcut1"/>
+        </aop:aspect>
+        
+        <aop:aspect ref="securityaspect" id="seurityaspect">
+            <aop:pointcut expression="execution(* sp.com.AopUsingXSD.services.AccountCreation.*(..))" id="btpointcut11" />
+            <aop:before method="mySecurity" pointcut-ref="btpointcut11" />
+          <aop:after method="mySecurity" pointcut-ref="btpointcut11"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
